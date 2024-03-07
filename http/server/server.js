@@ -1,10 +1,17 @@
 const http = require("node:http");
+const path = require("node:path");
+const fs = require("node:fs");
 
 const server = http.createServer((request, response) => {
   const { method, headers, httpVersion, url } = request;
   console.log({ method, headers, httpVersion, url });
 
-  if (url === "/" && method === "GET") {
+  if (url === "/page" && method === "GET") {
+    response.writeHead(200, "OK", { "Content-Type": "text/html" });
+    fs.createReadStream(path.resolve(__dirname, "page.html"), "utf-8").pipe(
+      response
+    );
+  } else if (url === "/" && method === "GET") {
     response.writeHead(200, "OK", { "Content-Type": "application/json" });
     response.end(JSON.stringify({ message: "Hello World" }));
   } else if (url === "/" && method === "POST") {
