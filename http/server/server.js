@@ -15,15 +15,15 @@ const server = http.createServer((request, response) => {
     response.writeHead(200, "OK", { "Content-Type": "application/json" });
     response.end(JSON.stringify({ message: "Hello World" }));
   } else if (url === "/" && method === "POST") {
-    const body = [];
+    let body = "";
 
+    request.setEncoding("utf-8");
     request
       .on("data", (chunk) => {
-        body.push(chunk);
+        body += chunk;
       })
       .on("end", () => {
-        const bodyString = Buffer.concat(body).toString();
-        console.log("Body data: ", bodyString);
+        console.log("Body data: ", body);
 
         response.writeHead(200, "OK", { "Content-Type": "application/json" });
         response.end(JSON.stringify({ message: "success" }));
